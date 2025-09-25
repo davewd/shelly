@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface ParsedCommand {
   id: string;
@@ -20,20 +20,21 @@ interface ParserSectionProps {
 
 export const ParserSection: React.FC<ParserSectionProps> = ({
   parsedCommands,
-  isVisible
+  isVisible,
 }) => {
   if (!isVisible) return null;
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.8) return 'text-green-600 bg-green-50 border-green-200';
-    if (confidence >= 0.6) return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-    return 'text-red-600 bg-red-50 border-red-200';
+    if (confidence >= 0.8) return "text-green-600 bg-green-50 border-green-200";
+    if (confidence >= 0.6)
+      return "text-yellow-600 bg-yellow-50 border-yellow-200";
+    return "text-red-600 bg-red-50 border-red-200";
   };
 
   const getConfidenceLabel = (confidence: number) => {
-    if (confidence >= 0.8) return 'High';
-    if (confidence >= 0.6) return 'Medium';
-    return 'Low';
+    if (confidence >= 0.8) return "High";
+    if (confidence >= 0.6) return "Medium";
+    return "Low";
   };
 
   return (
@@ -60,8 +61,13 @@ export const ParserSection: React.FC<ParserSectionProps> = ({
                   <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
                     Command #{index + 1}
                   </span>
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getConfidenceColor(cmd.confidence)}`}>
-                    {getConfidenceLabel(cmd.confidence)} ({Math.round(cmd.confidence * 100)}%)
+                  <span
+                    className={`px-2 py-1 text-xs font-medium rounded-full border ${getConfidenceColor(
+                      cmd.confidence
+                    )}`}
+                  >
+                    {getConfidenceLabel(cmd.confidence)} (
+                    {Math.round(cmd.confidence * 100)}%)
                   </span>
                 </div>
                 <code className="text-sm font-mono bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded text-neutral-800 dark:text-neutral-200">
@@ -79,22 +85,35 @@ export const ParserSection: React.FC<ParserSectionProps> = ({
                 <div className="space-y-1">
                   {cmd.components.action && (
                     <div className="text-xs">
-                      <span className="font-medium text-primary-600">Action:</span> {cmd.components.action}
+                      <span className="font-medium text-primary-600">
+                        Action:
+                      </span>{" "}
+                      {cmd.components.action}
                     </div>
                   )}
                   {cmd.components.target && (
                     <div className="text-xs">
-                      <span className="font-medium text-secondary-600">Target:</span> {cmd.components.target}
+                      <span className="font-medium text-secondary-600">
+                        Target:
+                      </span>{" "}
+                      {cmd.components.target}
                     </div>
                   )}
-                  {cmd.components.parameters && cmd.components.parameters.length > 0 && (
-                    <div className="text-xs">
-                      <span className="font-medium text-green-600">Params:</span> {cmd.components.parameters.join(', ')}
-                    </div>
-                  )}
+                  {cmd.components.parameters &&
+                    cmd.components.parameters.length > 0 && (
+                      <div className="text-xs">
+                        <span className="font-medium text-green-600">
+                          Params:
+                        </span>{" "}
+                        {cmd.components.parameters.join(", ")}
+                      </div>
+                    )}
                   {cmd.components.flags && cmd.components.flags.length > 0 && (
                     <div className="text-xs">
-                      <span className="font-medium text-orange-600">Flags:</span> {cmd.components.flags.join(', ')}
+                      <span className="font-medium text-orange-600">
+                        Flags:
+                      </span>{" "}
+                      {cmd.components.flags.join(", ")}
                     </div>
                   )}
                 </div>
@@ -113,7 +132,10 @@ export const ParserSection: React.FC<ParserSectionProps> = ({
 
             {/* Test the regex */}
             <div className="text-xs text-neutral-500 dark:text-neutral-400 border-t border-neutral-200 dark:border-neutral-600 pt-2">
-              <span className="font-medium">Test:</span> {new RegExp(cmd.regex).test(cmd.originalCommand) ? '✅ Matches' : '❌ No match'}
+              <span className="font-medium">Test:</span>{" "}
+              {new RegExp(cmd.regex).test(cmd.originalCommand)
+                ? "✅ Matches"
+                : "❌ No match"}
             </div>
           </div>
         ))}
@@ -123,7 +145,9 @@ export const ParserSection: React.FC<ParserSectionProps> = ({
         <div className="text-center py-8 text-neutral-500 dark:text-neutral-400">
           <div className="text-4xl mb-2">🤖</div>
           <p>No commands to analyze yet.</p>
-          <p className="text-sm">Enter some commands above and click "Analyze Commands".</p>
+          <p className="text-sm">
+            Enter some commands above and click "Analyze Commands".
+          </p>
         </div>
       )}
     </div>

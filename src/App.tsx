@@ -66,19 +66,14 @@ function App() {
                   Shelly
                 </h1>
                 <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                  Command-to-Regex Lexical Parser
+                  Command-to-Regex Lexical Parser for the Vibez!!
                 </p>
               </div>
             </div>
             <div className="flex items-center space-x-4 text-sm text-neutral-500 dark:text-neutral-400">
-              <div className="flex items-center space-x-1">
-                <span>⚡</span>
-                <span>Fast Analysis</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <span>🎯</span>
-                <span>Multi-Format Export</span>
-              </div>
+              <a href="https://www.buymeacoffee.com/davewd">
+                <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=davewd&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" />
+              </a>
             </div>
           </div>
         </div>
@@ -120,11 +115,7 @@ function App() {
             isVisible={hasAnalyzed && parsedCommands.length > 0}
           />
         </div>{" "}
-        <div className="text-center max-w-3xl mx-auto">
-          <a href="https://www.buymeacoffee.com/davewd">
-            <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=davewd&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" />
-          </a>
-        </div>
+        <div className="text-center max-w-3xl mx-auto"></div>
       </main>
 
       {/* Footer */}
