@@ -323,20 +323,29 @@ The goal is to have clean, executable commands that can be analyzed for patterns
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div className="text-sm text-neutral-500 dark:text-neutral-400">
-              © 2025 Shelly. Built with React, TypeScript, and Tailwind CSS.
+              © 2025 Shelly.
+            </div>
+            <div className="text-sm text-neutral-500 dark:text-neutral-400">
+              Made with ❤️ in 🇦🇺
             </div>
             <div className="flex items-center space-x-4 text-sm">
               <a
-                href="#"
+                href="https://www.cogntion.ninja"
                 className="text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors"
               >
-                Documentation
+                Brother
               </a>
               <a
-                href="#"
+                href="https://www.davedawson.co"
                 className="text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors"
               >
-                GitHub
+                Dad
+              </a>
+              <a
+                href="http://www.github.com/davewd/shelly"
+                className="text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400 transition-colors"
+              >
+                Me
               </a>
             </div>
           </div>
