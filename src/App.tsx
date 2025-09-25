@@ -23,6 +23,7 @@ function App() {
   const [parsedCommands, setParsedCommands] = useState<ParsedCommand[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [hasAnalyzed, setHasAnalyzed] = useState<boolean>(false);
+  const [isInputCollapsed, setIsInputCollapsed] = useState<boolean>(false);
 
   const handleAnalyze = async () => {
     if (!commands.trim()) return;
@@ -39,6 +40,7 @@ function App() {
 
     setParsedCommands(results);
     setHasAnalyzed(true);
+    setIsInputCollapsed(true); // Collapse input after analysis
     setIsAnalyzing(false);
   };
 
@@ -48,7 +50,15 @@ function App() {
     if (hasAnalyzed) {
       setHasAnalyzed(false);
       setParsedCommands([]);
+      setIsInputCollapsed(false); // Expand input when editing
     }
+  };
+
+  const handleEditCommands = () => {
+    // Clear analysis and expand input section
+    setHasAnalyzed(false);
+    setParsedCommands([]);
+    setIsInputCollapsed(false);
   };
 
   return (
@@ -58,8 +68,8 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">S</span>
+              <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center text-4xl font-bold">
+                🐚
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
@@ -101,6 +111,12 @@ function App() {
             onChange={handleCommandsChange}
             onAnalyze={handleAnalyze}
             isAnalyzing={isAnalyzing}
+            isCollapsed={isInputCollapsed}
+            onExpand={handleEditCommands}
+            commandCount={parsedCommands.length}
+            lineCount={
+              commands.split("\n").filter((line) => line.trim()).length
+            }
           />
 
           {/* Parser Results Section */}

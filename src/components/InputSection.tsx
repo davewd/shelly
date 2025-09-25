@@ -5,6 +5,10 @@ interface InputSectionProps {
   onChange: (commands: string) => void;
   onAnalyze: () => void;
   isAnalyzing?: boolean;
+  isCollapsed?: boolean;
+  onExpand?: () => void;
+  commandCount?: number;
+  lineCount?: number;
 }
 
 export const InputSection: React.FC<InputSectionProps> = ({
@@ -12,6 +16,10 @@ export const InputSection: React.FC<InputSectionProps> = ({
   onChange,
   onAnalyze,
   isAnalyzing = false,
+  isCollapsed = false,
+  onExpand,
+  commandCount = 0,
+  lineCount = 0,
 }) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Tab") {
@@ -30,6 +38,44 @@ export const InputSection: React.FC<InputSectionProps> = ({
     }
   };
 
+  // If collapsed, show summary view
+  if (isCollapsed) {
+    return (
+      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-soft border border-neutral-200 dark:border-neutral-700 p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <h2 className="text-lg font-medium text-neutral-900 dark:text-neutral-100">
+                Command Input
+              </h2>
+              <div className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 px-2 py-1 rounded-full text-xs font-medium">
+                ✓ Analyzed
+              </div>
+            </div>
+            <div className="text-sm text-neutral-600 dark:text-neutral-400">
+              Identified{" "}
+              <span className="font-medium text-primary-600 dark:text-primary-400">
+                {commandCount} commands
+              </span>{" "}
+              on{" "}
+              <span className="font-medium text-secondary-600 dark:text-secondary-400">
+                {lineCount} rows
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={onExpand}
+            className="inline-flex items-center px-3 py-2 bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 text-neutral-700 dark:text-neutral-300 text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1"
+          >
+            <span className="mr-2">✏️</span>
+            Edit Commands
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Expanded view (original form)
   return (
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-soft border border-neutral-200 dark:border-neutral-700 p-6">
       <div className="flex items-center justify-between mb-4">
