@@ -61,20 +61,22 @@ function App() {
     setIsInputCollapsed(false);
   };
 
-  const handleCopyPrompt = async (promptType: 'extract_chat' | 'format_chat_commands') => {
+  const handleCopyPrompt = async (
+    promptType: "extract_chat" | "format_chat_commands"
+  ) => {
     try {
       // Import the prompt content dynamically
       const promptModule = await import(`./assets/${promptType}.prompt.md?raw`);
       const promptContent = promptModule.default;
-      
+
       // Copy to clipboard
       await navigator.clipboard.writeText(promptContent);
-      
+
       // You could add a toast notification here
       console.log(`${promptType} prompt copied to clipboard!`);
     } catch (error) {
-      console.error('Failed to copy prompt:', error);
-      
+      console.error("Failed to copy prompt:", error);
+
       // Fallback content if file reading fails
       const fallbackPrompts = {
         extract_chat: `Please extract all terminal commands from this conversation transcript. 
@@ -89,7 +91,7 @@ Focus on commands like:
 - python/node execution commands
 
 Please provide just the raw commands without explanations.`,
-        
+
         format_chat_commands: `I have a list of terminal commands extracted from conversation logs. Please format and clean them up for analysis.
 
 Remove any:
@@ -104,14 +106,14 @@ Format the output as:
 - Keep file paths and arguments intact
 - Sort by command type if possible
 
-The goal is to have clean, executable commands that can be analyzed for patterns.`
+The goal is to have clean, executable commands that can be analyzed for patterns.`,
       };
-      
+
       try {
         await navigator.clipboard.writeText(fallbackPrompts[promptType]);
         console.log(`${promptType} fallback prompt copied to clipboard!`);
       } catch (clipboardError) {
-        console.error('Failed to copy fallback prompt:', clipboardError);
+        console.error("Failed to copy fallback prompt:", clipboardError);
       }
     }
   };
@@ -160,9 +162,10 @@ The goal is to have clean, executable commands that can be analyzed for patterns
               Transform Commands into Regular Expressions
             </h2>
             <p className="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed mb-6">
-              Improve your Vibe Coding productivity by analyzing terminal commands and creating auto-approve/deny lists for your settings.
+              Improve your Vibe Coding productivity by analyzing terminal
+              commands and creating auto-approve/deny lists for your settings.
             </p>
-            
+
             {/* Numbered workflow steps */}
             <div className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl border border-amber-200 dark:border-amber-700/50 p-6 text-left">
               <h3 className="text-xl font-semibold text-amber-900 dark:text-amber-100 mb-4 text-center">
@@ -174,7 +177,8 @@ The goal is to have clean, executable commands that can be analyzed for patterns
                     1
                   </span>
                   <p className="text-amber-800 dark:text-amber-200">
-                    <strong>Use the Prompts</strong> to extract data from your Vibe Coding conversations
+                    <strong>Use the Prompts</strong> to extract data from your
+                    Vibe Coding conversations
                   </p>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -182,7 +186,8 @@ The goal is to have clean, executable commands that can be analyzed for patterns
                     2
                   </span>
                   <p className="text-amber-800 dark:text-amber-200">
-                    <strong>Copy and paste</strong> the commands you are seeing into 'Command Input'
+                    <strong>Copy and paste</strong> the commands you are seeing
+                    into 'Command Input'
                   </p>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -190,7 +195,8 @@ The goal is to have clean, executable commands that can be analyzed for patterns
                     3
                   </span>
                   <p className="text-amber-800 dark:text-amber-200">
-                    <strong>Analyze the commands</strong> to identify whether they should be added to auto approve/deny lists
+                    <strong>Analyze the commands</strong> to identify whether
+                    they should be added to auto approve/deny lists
                   </p>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -198,7 +204,8 @@ The goal is to have clean, executable commands that can be analyzed for patterns
                     4
                   </span>
                   <p className="text-amber-800 dark:text-amber-200">
-                    <strong>Copy the output</strong> so it can be added to your settings file to improve your Vibe Coding productivity
+                    <strong>Copy the output</strong> so it can be added to your
+                    settings file to improve your Vibe Coding productivity
                   </p>
                 </div>
               </div>
@@ -213,7 +220,8 @@ The goal is to have clean, executable commands that can be analyzed for patterns
                   📋 Step 1: Copy Extraction Prompts
                 </h3>
                 <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-                  Copy these prompts to your chat window to extract commands from conversations
+                  Copy these prompts to your chat window to extract commands
+                  from conversations
                 </p>
               </div>
               <div className="flex items-center space-x-2">
@@ -223,40 +231,48 @@ The goal is to have clean, executable commands that can be analyzed for patterns
                 </span>
               </div>
             </div>
-            
+
             <div className="flex flex-wrap gap-3">
               <button
-                onClick={() => handleCopyPrompt('extract_chat')}
+                onClick={() => handleCopyPrompt("extract_chat")}
                 className="inline-flex items-center px-4 py-3 bg-white dark:bg-neutral-800 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-300 dark:border-blue-600 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 shadow-sm"
               >
                 <span className="mr-3 text-xl">💬</span>
                 <div className="text-left">
-                  <div className="text-sm font-semibold">Extract from Conversation</div>
+                  <div className="text-sm font-semibold">
+                    Extract from Conversation
+                  </div>
                   <div className="text-xs text-blue-600 dark:text-blue-400">
                     Copy prompt → Paste in chat
                   </div>
                 </div>
               </button>
-              
+
               <button
-                onClick={() => handleCopyPrompt('format_chat_commands')}
+                onClick={() => handleCopyPrompt("format_chat_commands")}
                 className="inline-flex items-center px-4 py-3 bg-white dark:bg-neutral-800 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-300 dark:border-blue-600 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 shadow-sm"
               >
                 <span className="mr-3 text-xl">📋</span>
                 <div className="text-left">
-                  <div className="text-sm font-semibold">Format Chat Commands</div>
+                  <div className="text-sm font-semibold">
+                    Format Chat Commands
+                  </div>
                   <div className="text-xs text-blue-600 dark:text-blue-400">
                     Copy prompt → Paste in chat
                   </div>
                 </div>
               </button>
             </div>
-            
+
             <div className="mt-4 p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
               <div className="flex items-start space-x-2">
-                <span className="text-blue-600 dark:text-blue-400 mt-0.5">💡</span>
+                <span className="text-blue-600 dark:text-blue-400 mt-0.5">
+                  💡
+                </span>
                 <p className="text-sm text-blue-800 dark:text-blue-200">
-                  <strong>Next:</strong> After running the prompts in your chat, copy the extracted commands and paste them into the Command Input section below.
+                  <strong>Next:</strong> After running the prompts in your chat,
+                  copy the extracted commands and paste them into the Command
+                  Input section below.
                 </p>
               </div>
             </div>

@@ -31,19 +31,19 @@ export const InputSection: React.FC<InputSectionProps> = ({
         "git add .",
         "git commit -m 'Update features'",
         "git push origin main",
-        "git pull upstream develop"
-      ]
+        "git pull upstream develop",
+      ],
     },
     {
       name: "Docker Setup",
-      icon: "🐳", 
+      icon: "🐳",
       commands: [
         "docker build -t webapp .",
         "docker run -p 3000:3000 webapp",
         "docker ps -a",
         "docker stop container_name",
-        "docker-compose up -d"
-      ]
+        "docker-compose up -d",
+      ],
     },
     {
       name: "Node Development",
@@ -53,8 +53,8 @@ export const InputSection: React.FC<InputSectionProps> = ({
         "npm run build",
         "npm test --coverage",
         "npm start",
-        "yarn add typescript"
-      ]
+        "yarn add typescript",
+      ],
     },
     {
       name: "File Operations",
@@ -64,8 +64,8 @@ export const InputSection: React.FC<InputSectionProps> = ({
         "ls -la /home/user",
         "cp -r source/ destination/",
         "rm -rf temp_folder",
-        "chmod +x script.sh"
-      ]
+        "chmod +x script.sh",
+      ],
     },
     {
       name: "System Monitor",
@@ -75,24 +75,24 @@ export const InputSection: React.FC<InputSectionProps> = ({
         "top -p process_id",
         "df -h",
         "free -m",
-        "netstat -tulpn"
-      ]
+        "netstat -tulpn",
+      ],
     },
     {
-      name: "Python Projects", 
+      name: "Python Projects",
       icon: "🐍",
       commands: [
         "python -m venv myenv",
         "./venv/bin/python main.py",
-        "pip install -r requirements.txt", 
+        "pip install -r requirements.txt",
         "python manage.py migrate",
-        "pytest tests/ -v"
-      ]
-    }
+        "pytest tests/ -v",
+      ],
+    },
   ];
 
   const loadExample = (commands: string[]) => {
-    onChange(commands.join('\n'));
+    onChange(commands.join("\n"));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
