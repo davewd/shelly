@@ -18,15 +18,16 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm'
 
-    - name: Install dependencies
+    - name: Update npm
+      run: npm install -g npm@latest
+
+    - name: Clean and install dependencies
       run: |
-        if [ ! -f package-lock.json ] || ! npm ci --dry-run; then
-          npm install
-        else
-          npm ci
-        fi
+        # Remove any existing node_modules and lock file
+        rm -rf node_modules package-lock.json
+        # Install with force to resolve optional dependency issues
+        npm install --force
 
     - name: Build
       run: npm run build
