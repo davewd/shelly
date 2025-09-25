@@ -1,0 +1,43 @@
+/* App-specific styles for Shelly */
+
+/* Smooth transitions for dark mode */
+* {
+  transition-property: background-color, border-color, color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d4d4d4;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a3a3a3;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-thumb {
+    background-color: #525252;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #737373;
+  }
+}
+
+/* Custom focus styles for better accessibility */
+.focus-ring:focus {
+  outline: 2px solid #0ea5e9;
+  outline-offset: 2px;
+}
