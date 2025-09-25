@@ -7,6 +7,9 @@
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   },
+  "overrides": {
+    "rollup": "4.21.2"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

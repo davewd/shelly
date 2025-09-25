@@ -19,18 +19,20 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Update npm
-      run: npm install -g npm@latest
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
 
-    - name: Clean and install dependencies
+    - name: Install dependencies
       run: |
-        # Remove any existing node_modules and lock file
-        rm -rf node_modules package-lock.json
-        # Install with force to resolve optional dependency issues
-        npm install --force
+        # Remove any existing node_modules and lock files
+        rm -rf node_modules package-lock.json pnpm-lock.yaml
+        # Use pnpm which handles optional dependencies better
+        pnpm install
 
     - name: Build
-      run: npm run build
+      run: pnpm run build
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
