@@ -7,9 +7,6 @@
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   },
-  "overrides": {
-    "rollup": "4.21.2"
-  },
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist --cname davewd.github.io/shelly/",
@@ -25,7 +22,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
-    "@rollup/rollup-linux-x64-gnu": "^4.21.2",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^20.0.0",
     "@types/react": "^18.3.18",
