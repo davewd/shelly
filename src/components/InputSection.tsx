@@ -1,5 +1,10 @@
 import React from "react";
 
+interface AnalysisSettings {
+  allowWhitespaceInPaths: boolean;
+  useFixedPaths: boolean;
+}
+
 interface InputSectionProps {
   commands: string;
   onChange: (commands: string) => void;
@@ -9,6 +14,8 @@ interface InputSectionProps {
   onExpand?: () => void;
   commandCount?: number;
   lineCount?: number;
+  analysisSettings?: AnalysisSettings;
+  onSettingsChange?: (settings: AnalysisSettings) => void;
 }
 
 export const InputSection: React.FC<InputSectionProps> = ({
@@ -20,6 +27,8 @@ export const InputSection: React.FC<InputSectionProps> = ({
   onExpand,
   commandCount = 0,
   lineCount = 0,
+  analysisSettings = { allowWhitespaceInPaths: false, useFixedPaths: false },
+  onSettingsChange,
 }) => {
   // Example command sets
   const exampleSets = [
@@ -249,6 +258,61 @@ mkdir src/components`}
               </>
             )}
           </button>
+        </div>
+
+        {/* Analysis Settings */}
+        <div className="mt-6 p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700">
+          <h3 className="text-sm font-medium text-neutral-900 dark:text-neutral-100 mb-3 flex items-center">
+            <span className="mr-2">⚙️</span>
+            Analysis Settings
+          </h3>
+          <div className="space-y-3">
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                checked={analysisSettings.allowWhitespaceInPaths}
+                onChange={(e) =>
+                  onSettingsChange?.({
+                    ...analysisSettings,
+                    allowWhitespaceInPaths: e.target.checked,
+                  })
+                }
+                className="w-4 h-4 text-primary-600 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 rounded focus:ring-primary-500 focus:ring-2"
+              />
+              <div>
+                <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                  Allow whitespace in paths
+                </span>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                  Generate patterns that match paths containing spaces (e.g.,
+                  "My Documents/file.txt")
+                </p>
+              </div>
+            </label>
+
+            <label className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                checked={analysisSettings.useFixedPaths}
+                onChange={(e) =>
+                  onSettingsChange?.({
+                    ...analysisSettings,
+                    useFixedPaths: e.target.checked,
+                  })
+                }
+                className="w-4 h-4 text-primary-600 bg-white dark:bg-neutral-800 border-neutral-300 dark:border-neutral-600 rounded focus:ring-primary-500 focus:ring-2"
+              />
+              <div>
+                <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                  Use fixed paths
+                </span>
+                <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                  Generate exact path matches instead of flexible patterns (more
+                  restrictive)
+                </p>
+              </div>
+            </label>
+          </div>
         </div>
       </div>
     </div>

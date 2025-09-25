@@ -18,12 +18,21 @@ interface ParsedCommand {
   confidence: number;
 }
 
+interface AnalysisSettings {
+  allowWhitespaceInPaths: boolean;
+  useFixedPaths: boolean;
+}
+
 function App() {
   const [commands, setCommands] = useState<string>("");
   const [parsedCommands, setParsedCommands] = useState<ParsedCommand[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [hasAnalyzed, setHasAnalyzed] = useState<boolean>(false);
   const [isInputCollapsed, setIsInputCollapsed] = useState<boolean>(false);
+  const [analysisSettings, setAnalysisSettings] = useState<AnalysisSettings>({
+    allowWhitespaceInPaths: false,
+    useFixedPaths: false,
+  });
 
   const handleAnalyze = async () => {
     if (!commands.trim()) return;
@@ -36,7 +45,7 @@ function App() {
     const commandLines = commands
       .split("\n")
       .filter((line) => line.trim().length > 0);
-    const results = LexicalParser.parseCommands(commandLines);
+    const results = LexicalParser.parseCommands(commandLines, analysisSettings);
 
     setParsedCommands(results);
     setHasAnalyzed(true);
@@ -290,6 +299,8 @@ The goal is to have clean, executable commands that can be analyzed for patterns
             lineCount={
               commands.split("\n").filter((line) => line.trim()).length
             }
+            analysisSettings={analysisSettings}
+            onSettingsChange={setAnalysisSettings}
           />
 
           {/* Parser Results Section */}

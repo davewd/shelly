@@ -11,62 +11,121 @@ interface ParsedCommand {
     confidence: number;
 }
 
+interface AnalysisSettings {
+    allowWhitespaceInPaths: boolean;
+    useFixedPaths: boolean;
+}
+
 export class LexicalParser {
     private static commandPatterns = [
         // Git commands
         {
             pattern: /^git\s+(add|commit|push|pull|checkout|branch|merge|clone|status|log)\s*(.*)/,
             type: 'git',
-            generateRegex: (matches: RegExpMatchArray) => {
+            generateRegex: (matches: RegExpMatchArray, settings: AnalysisSettings) => {
                 const action = matches[1];
                 const args = matches[2]?.trim();
-                return args ? `^git\\s+${action}\\s+${args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}` : `^git\\s+${action}`;
+                if (!args) return `^git\\s+${action}`;
+
+                if (settings.useFixedPaths) {
+                    return `^git\\s+${action}\\s+${args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`;
+                }
+
+                let processedArgs = args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                if (settings.allowWhitespaceInPaths) {
+                    // Allow flexible whitespace in file paths
+                    processedArgs = processedArgs.replace(/\\\s+/g, '\\s+');
+                }
+                return `^git\\s+${action}\\s+${processedArgs}`;
             }
         },
         // npm/yarn commands
         {
             pattern: /^(npm|yarn|pnpm)\s+(install|add|remove|build|start|test|run)\s*(.*)/,
             type: 'package-manager',
-            generateRegex: (matches: RegExpMatchArray) => {
+            generateRegex: (matches: RegExpMatchArray, settings: AnalysisSettings) => {
                 const manager = matches[1];
                 const action = matches[2];
                 const args = matches[3]?.trim();
-                return args ? `^${manager}\\s+${action}\\s+${args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}` : `^${manager}\\s+${action}`;
+                if (!args) return `^${manager}\\s+${action}`;
+
+                if (settings.useFixedPaths) {
+                    return `^${manager}\\s+${action}\\s+${args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`;
+                }
+
+                let processedArgs = args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                if (settings.allowWhitespaceInPaths) {
+                    processedArgs = processedArgs.replace(/\\\s+/g, '\\s+');
+                }
+                return `^${manager}\\s+${action}\\s+${processedArgs}`;
             }
         },
         // Docker commands
         {
             pattern: /^docker\s+(build|run|pull|push|ps|images|stop|start|exec)\s*(.*)/,
             type: 'docker',
-            generateRegex: (matches: RegExpMatchArray) => {
+            generateRegex: (matches: RegExpMatchArray, settings: AnalysisSettings) => {
                 const action = matches[1];
                 const args = matches[2]?.trim();
-                return args ? `^docker\\s+${action}\\s+${args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}` : `^docker\\s+${action}`;
+                if (!args) return `^docker\\s+${action}`;
+
+                if (settings.useFixedPaths) {
+                    return `^docker\\s+${action}\\s+${args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`;
+                }
+
+                let processedArgs = args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                if (settings.allowWhitespaceInPaths) {
+                    processedArgs = processedArgs.replace(/\\\s+/g, '\\s+');
+                }
+                return `^docker\\s+${action}\\s+${processedArgs}`;
             }
         },
         // File operations
         {
             pattern: /^(ls|dir|cat|touch|mkdir|rm|cp|mv|chmod|chown)\s*(.*)/,
             type: 'file-ops',
-            generateRegex: (matches: RegExpMatchArray) => {
+            generateRegex: (matches: RegExpMatchArray, settings: AnalysisSettings) => {
                 const command = matches[1];
                 const args = matches[2]?.trim();
-                return args ? `^${command}\\s+${args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}` : `^${command}`;
+                if (!args) return `^${command}`;
+
+                if (settings.useFixedPaths) {
+                    return `^${command}\\s+${args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`;
+                }
+
+                let processedArgs = args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                if (settings.allowWhitespaceInPaths) {
+                    // For file operations, be more flexible with paths that might contain spaces
+                    processedArgs = processedArgs.replace(/\\\s+/g, '\\s+');
+                    // Also allow for quoted paths
+                    processedArgs = processedArgs.replace(/\\"/g, '["\'"]?').replace(/\\'/g, '["\'"]?');
+                }
+                return `^${command}\\s+${processedArgs}`;
             }
         },
         // Generic command pattern
         {
             pattern: /^(\w+)\s*(.*)/,
             type: 'generic',
-            generateRegex: (matches: RegExpMatchArray) => {
+            generateRegex: (matches: RegExpMatchArray, settings: AnalysisSettings) => {
                 const command = matches[1];
                 const args = matches[2]?.trim();
-                return args ? `^${command}\\s+${args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}` : `^${command}`;
+                if (!args) return `^${command}`;
+
+                if (settings.useFixedPaths) {
+                    return `^${command}\\s+${args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`;
+                }
+
+                let processedArgs = args.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                if (settings.allowWhitespaceInPaths) {
+                    processedArgs = processedArgs.replace(/\\\s+/g, '\\s+');
+                }
+                return `^${command}\\s+${processedArgs}`;
             }
         }
     ];
 
-    static parseCommands(commands: string[]): ParsedCommand[] {
+    static parseCommands(commands: string[], settings: AnalysisSettings = { allowWhitespaceInPaths: false, useFixedPaths: false }): ParsedCommand[] {
         return commands
             .filter(cmd => cmd.trim().length > 0)
             .map((command, index) => {
@@ -76,7 +135,7 @@ export class LexicalParser {
                     const match = trimmedCommand.match(pattern.pattern);
                     if (match) {
                         const components = this.extractComponents(match, pattern.type);
-                        const regex = pattern.generateRegex(match);
+                        const regex = pattern.generateRegex(match, settings);
 
                         return {
                             id: `cmd_${index}_${Date.now()}`,
@@ -89,11 +148,15 @@ export class LexicalParser {
                 }
 
                 // Fallback for unmatched commands
+                const fallbackRegex = settings.useFixedPaths
+                    ? `^${trimmedCommand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`
+                    : `^${trimmedCommand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`;
+
                 return {
                     id: `cmd_${index}_${Date.now()}`,
                     originalCommand: trimmedCommand,
                     components: { action: trimmedCommand.split(' ')[0] },
-                    regex: `^${trimmedCommand.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`,
+                    regex: fallbackRegex,
                     confidence: 0.3
                 };
             });
