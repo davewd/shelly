@@ -7,7 +7,7 @@ permissions:
   contents: write
 jobs:
   build-and-deploy:
-    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
@@ -16,12 +16,21 @@ jobs:
          submodules: recursive
          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install and Build 🔧
         run: |
-          npm ci
+          # Clean install with dependency resolution
+          npm ci --legacy-peer-deps || (rm -f package-lock.json && npm install --legacy-peer-deps)
+          # Run the build
           npm run build
+        env:
+          NODE_OPTIONS: --max_old_space_size=4096
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: dist # The folder the action should deploy.
+          folder: dist
