@@ -21,6 +21,80 @@ export const InputSection: React.FC<InputSectionProps> = ({
   commandCount = 0,
   lineCount = 0,
 }) => {
+  // Example command sets
+  const exampleSets = [
+    {
+      name: "Git Workflow",
+      icon: "🌿",
+      commands: [
+        "git status",
+        "git add .",
+        "git commit -m 'Update features'",
+        "git push origin main",
+        "git pull upstream develop"
+      ]
+    },
+    {
+      name: "Docker Setup",
+      icon: "🐳", 
+      commands: [
+        "docker build -t webapp .",
+        "docker run -p 3000:3000 webapp",
+        "docker ps -a",
+        "docker stop container_name",
+        "docker-compose up -d"
+      ]
+    },
+    {
+      name: "Node Development",
+      icon: "📦",
+      commands: [
+        "npm install express",
+        "npm run build",
+        "npm test --coverage",
+        "npm start",
+        "yarn add typescript"
+      ]
+    },
+    {
+      name: "File Operations",
+      icon: "📁",
+      commands: [
+        "mkdir -p src/components",
+        "ls -la /home/user",
+        "cp -r source/ destination/",
+        "rm -rf temp_folder",
+        "chmod +x script.sh"
+      ]
+    },
+    {
+      name: "System Monitor",
+      icon: "⚡",
+      commands: [
+        "ps aux | grep node",
+        "top -p process_id",
+        "df -h",
+        "free -m",
+        "netstat -tulpn"
+      ]
+    },
+    {
+      name: "Python Projects", 
+      icon: "🐍",
+      commands: [
+        "python -m venv myenv",
+        "./venv/bin/python main.py",
+        "pip install -r requirements.txt", 
+        "python manage.py migrate",
+        "pytest tests/ -v"
+      ]
+    }
+  ];
+
+  const loadExample = (commands: string[]) => {
+    onChange(commands.join('\n'));
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Tab") {
       e.preventDefault();
@@ -80,11 +154,35 @@ export const InputSection: React.FC<InputSectionProps> = ({
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-soft border border-neutral-200 dark:border-neutral-700 p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
-          Command Input
+          📝 Step 2: Command Input
         </h2>
         <div className="flex items-center space-x-2 text-sm text-neutral-500 dark:text-neutral-400">
           <span>⌨️</span>
           <span>One command per line</span>
+        </div>
+      </div>
+
+      {/* Example Buttons */}
+      <div className="mb-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            Quick Examples
+          </h3>
+          <span className="text-xs text-neutral-500 dark:text-neutral-400">
+            Click to auto-populate
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {exampleSets.map((example) => (
+            <button
+              key={example.name}
+              onClick={() => loadExample(example.commands)}
+              className="inline-flex items-center px-3 py-2 bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 hover:from-primary-100 hover:to-secondary-100 dark:hover:from-primary-800/30 dark:hover:to-secondary-800/30 text-primary-700 dark:text-primary-300 text-sm font-medium rounded-lg border border-primary-200 dark:border-primary-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1"
+            >
+              <span className="mr-2">{example.icon}</span>
+              {example.name}
+            </button>
+          ))}
         </div>
       </div>
 

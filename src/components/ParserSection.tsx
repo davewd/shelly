@@ -141,7 +141,7 @@ export const ParserSection: React.FC<ParserSectionProps> = ({
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-soft border border-neutral-200 dark:border-neutral-700 p-6 animate-slide-up">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
-          Lexical Analysis
+          🔍 Step 3: Lexical Analysis
         </h2>
         <div className="flex items-center space-x-2 text-sm text-neutral-500 dark:text-neutral-400">
           <span>🧠</span>
