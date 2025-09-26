@@ -74,19 +74,7 @@ function App() {
     promptType: "extract_chat" | "format_chat_commands"
   ) => {
     try {
-      // Import the prompt content dynamically
-      const promptModule = await import(`./assets/${promptType}.prompt.md?raw`);
-      const promptContent = promptModule.default;
-
-      // Copy to clipboard
-      await navigator.clipboard.writeText(promptContent);
-
-      // You could add a toast notification here
-      console.log(`${promptType} prompt copied to clipboard!`);
-    } catch (error) {
-      console.error("Failed to copy prompt:", error);
-
-      // Fallback content if file reading fails
+      // Fallback content instead of dynamic import
       const fallbackPrompts = {
         extract_chat: `Please extract all terminal commands from this conversation transcript. 
 
@@ -118,12 +106,10 @@ Format the output as:
 The goal is to have clean, executable commands that can be analyzed for patterns.`,
       };
 
-      try {
-        await navigator.clipboard.writeText(fallbackPrompts[promptType]);
-        console.log(`${promptType} fallback prompt copied to clipboard!`);
-      } catch (clipboardError) {
-        console.error("Failed to copy fallback prompt:", clipboardError);
-      }
+      await navigator.clipboard.writeText(fallbackPrompts[promptType]);
+      console.log(`${promptType} prompt copied to clipboard!`);
+    } catch (error) {
+      console.error("Failed to copy prompt:", error);
     }
   };
 
