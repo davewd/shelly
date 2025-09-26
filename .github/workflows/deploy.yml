@@ -21,19 +21,20 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Setup yarn
+        uses: actions/setup-node@v4
         with:
-          version: 9
+          cache: 'yarn'
+          node-version: '20'
 
       - name: Install and Build 🔧
         run: |
           # Clean slate approach with pnpm
           rm -rf node_modules package-lock.json pnpm-lock.yaml
           # pnpm handles optional dependencies much better
-          pnpm install --frozen-lockfile=false
+          yarn install
           # Run the build
-          pnpm run build
+          yarn build
         env:
           NODE_OPTIONS: --max_old_space_size=4096
           CI: false
